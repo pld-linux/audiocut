@@ -12,15 +12,15 @@ BuildRequires:	libsndfile-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
-Audiocut is package of some small programs to manipulate wav files based
-on excelent libsndfile library.
+Audiocut is package of some small programs to manipulate wav files
+based on excelent libsndfile library.
 
 %description -l pl
-Audiocut to zbiór ma³ych programików do manipulowania plikami wav, oparty
-na znakomitej bibliotece libsndfile.
+Audiocut to zbiór ma³ych programików do manipulowania plikami wav,
+oparty na znakomitej bibliotece libsndfile.
 
 %prep
-%setup -q 
+%setup -q
 %patch0 -p1
 
 %build
