@@ -6,6 +6,7 @@ Release:	2
 License:	GPL
 Group:		Applications/Sound
 Source0:	http://www.slon.net/~gody/audiocut/%{name}-%{version}.tgz
+# Source0-md5:	33e99de848ef2021585680d2003899b3
 Patch0:		%{name}-make.patch
 Patch1:		%{name}-misc.patch
 URL:		http://www.slon.net/~gody/audiocut/
