@@ -1,0 +1,35 @@
+diff -Naur audiocut-0.6/Makefile audiocut-0.6-p/Makefile
+--- audiocut-0.6/Makefile	Sat Sep  9 11:17:02 2000
++++ audiocut-0.6-p/Makefile	Mon Sep  3 09:54:09 2001
+@@ -1,19 +1,20 @@
+ cc=gcc
+-all=-O2 -Wall
++CFLAGS=
++LDFLAGS=
+ 
+ 
+ all:
+-	$(cc) $(all) -o cut_zero_end.o -c cut_zero_end.c
+-	$(cc) $(all) -o printwav.o -c printwav.c
+-	$(cc) $(all) -o cat_wav.o -c cat_wav.c
+-	$(cc) $(all) -o time_wav.o -c time_wav.c
+-	$(cc) $(all) -o split_wav.o -c split_wav.c
++	$(cc) $(CFLAGS) -o cut_zero_end.o -c cut_zero_end.c
++	$(cc) $(CFLAGS) -o printwav.o -c printwav.c
++	$(cc) $(CFLAGS) -o cat_wav.o -c cat_wav.c
++	$(cc) $(CFLAGS) -o time_wav.o -c time_wav.c
++	$(cc) $(CFLAGS) -o split_wav.o -c split_wav.c
+ 
+-	$(cc) $(all) cut_zero_end.o -o wavtrim -lsndfile
+-	$(cc) $(all) printwav.o -o wavprint -lsndfile
+-	$(cc) $(all) cat_wav.o -o wavcat -lsndfile
+-	$(cc) $(all) time_wav.o -o wavtime -lsndfile
+-	$(cc) $(all) split_wav.o -o wavsplit -lsndfile
++	$(cc) $(LDFLAGS) cut_zero_end.o -o wavtrim -lsndfile -lm
++	$(cc) $(LDFLAGS) printwav.o -o wavprint -lsndfile
++	$(cc) $(LDFLAGS) cat_wav.o -o wavcat -lsndfile
++	$(cc) $(LDFLAGS) time_wav.o -o wavtime -lsndfile
++	$(cc) $(LDFLAGS) split_wav.o -o wavsplit -lsndfile
+ 	
+ 
+ clean:
