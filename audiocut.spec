@@ -14,7 +14,7 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
 Audiocut is package of some small programs to manipulate wav files
-based on excelent libsndfile library.
+based on excellent libsndfile library.
 
 %description -l pl
 Audiocut to zbiór ma³ych programików do manipulowania plikami wav,
