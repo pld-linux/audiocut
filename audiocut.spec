@@ -2,13 +2,14 @@ Summary:	WAV file manipulation tools
 Summary(pl):	Narzêdzia do manipulacji plikami WAV
 Name:		audiocut
 Version:	0.6
-Release:	1
+Release:	2
 License:	GPL
 Group:		Applications/Sound
 Source0:	http://www.slon.net/~gody/audiocut/%{name}-%{version}.tgz
 Patch0:		%{name}-make.patch
+Patch1:		%{name}-misc.patch
 URL:		http://www.slon.net/~gody/audiocut/
-BuildRequires:	libsndfile-devel
+BuildRequires:	libsndfile-devel >= 1.0.1
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -22,6 +23,7 @@ oparty na znakomitej bibliotece libsndfile.
 %prep
 %setup -q
 %patch0 -p1
+%patch1 -p1
 
 %build
 %{__make} \
