@@ -5,8 +5,6 @@ Version:	0.6
 Release:	1
 License:	GPL
 Group:		Applications/Sound
-Group(de):	Applikationen/Laut
-Group(pl):	Aplikacje/D¼wiêk
 Source0:	http://www.slon.net/~gody/audiocut/%{name}-%{version}.tgz
 Patch0:		%{name}-make.patch
 URL:		http://www.slon.net/~gody/audiocut/
