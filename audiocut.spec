@@ -2,7 +2,7 @@ Summary:	WAV file manipulation tools
 Summary(pl):	Narzêdzia do manipulacji plikami WAV
 Name:		audiocut
 Version:	0.6
-Release:	2
+Release:	3
 License:	GPL
 Group:		Applications/Sound
 Source0:	http://www.slon.net/~gody/audiocut/%{name}-%{version}.tgz
