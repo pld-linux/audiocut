@@ -26,23 +26,16 @@ na znakomitej bibliotece libsndfile.
 %patch0 -p1
 
 %build
-%{__make}
+%{__make} \
+	cc=%{__cc} \
+	CFLAGS="%{rpmcflags}" \
+	LDFLAGS="%{rpmldflags}"
 
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT%{_bindir}
 
-gcc  cut_zero_end.o -o wavtrim -lsndfile -lm
-gcc  printwav.o -o wavprint -lsndfile
-gcc  cat_wav.o -o wavcat -lsndfile
-gcc  time_wav.o -o wavtime -lsndfile
-gcc  split_wav.o -o wavsplit -lsndfile
-
-install wavtrim $RPM_BUILD_ROOT%{_bindir}
-install wavprint $RPM_BUILD_ROOT%{_bindir}
-install wavcat $RPM_BUILD_ROOT%{_bindir}
-install wavtime $RPM_BUILD_ROOT%{_bindir}
-install wavsplit $RPM_BUILD_ROOT%{_bindir}
+install wavtrim wavprint wavcat wavtime wavsplit $RPM_BUILD_ROOT%{_bindir}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
