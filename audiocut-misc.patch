@@ -1,0 +1,126 @@
+diff -uNr audiocut-0.6.orig/Makefile audiocut-0.6/Makefile
+--- audiocut-0.6.orig/Makefile	Mon Sep 16 22:42:25 2002
++++ audiocut-0.6/Makefile	Mon Sep 16 23:09:25 2002
+@@ -11,10 +11,10 @@
+ 	$(cc) $(CFLAGS) -o split_wav.o -c split_wav.c
+ 
+ 	$(cc) $(LDFLAGS) cut_zero_end.o -o wavtrim -lsndfile -lm
+-	$(cc) $(LDFLAGS) printwav.o -o wavprint -lsndfile
+-	$(cc) $(LDFLAGS) cat_wav.o -o wavcat -lsndfile
+-	$(cc) $(LDFLAGS) time_wav.o -o wavtime -lsndfile
+-	$(cc) $(LDFLAGS) split_wav.o -o wavsplit -lsndfile
++	$(cc) $(LDFLAGS) printwav.o -o wavprint -lsndfile -lm
++	$(cc) $(LDFLAGS) cat_wav.o -o wavcat -lsndfile -lm
++	$(cc) $(LDFLAGS) time_wav.o -o wavtime -lsndfile -lm
++	$(cc) $(LDFLAGS) split_wav.o -o wavsplit -lsndfile -lm
+ 	
+ 
+ clean:
+diff -uNr audiocut-0.6.orig/cat_wav.c audiocut-0.6/cat_wav.c
+--- audiocut-0.6.orig/cat_wav.c	Mon Sep 11 19:17:27 2000
++++ audiocut-0.6/cat_wav.c	Mon Sep 16 23:05:40 2002
+@@ -40,12 +40,12 @@
+ 
+ 	for ( j = 3 ; j < argc; j++ ) {
+ 		filename = (char *)argv[j];
+-		audiofile = sf_open_read ( filename, &sfinfo ) ;
++		audiofile = sf_open ( filename, SFM_READ, &sfinfo ) ;
+ 		if ( ! newaudiofile ) {
+-			newaudiofile = sf_open_write ( outfile , &sfinfo ) ;
++			newaudiofile = sf_open ( outfile, SFM_WRITE, &sfinfo ) ;
+ 		}
+ 		i = 0;
+-		while ( i < sfinfo.samples ) {
++		while ( i < sfinfo.frames ) {
+ 			inframes = sf_readf_short ( audiofile,(short *) &Frames , MAX_FRAMES ) ;
+ 			outframes = sf_writef_short ( newaudiofile, (short *)&Frames , inframes ) ;
+ 			i += inframes ;
+diff -uNr audiocut-0.6.orig/cut_zero_end.c audiocut-0.6/cut_zero_end.c
+--- audiocut-0.6.orig/cut_zero_end.c	Sat Sep 16 14:54:55 2000
++++ audiocut-0.6/cut_zero_end.c	Mon Sep 16 23:06:17 2002
+@@ -42,7 +42,7 @@
+ 
+ 	position = sf_seek ( audiofile, 0 , SEEK_END ) ;	// na konec datoteke
+ 	i = 1 ;
+-	last_usable = sfinfo->samples ;
++	last_usable = sfinfo->frames ;
+ 	position = sf_seek ( audiofile, -i , SEEK_END ) ;
+ 	inframes = sf_readf_short ( audiofile, (short *) &Frame , 1 ) ;
+ 
+@@ -105,16 +105,16 @@
+ 	}
+ 	
+ 	filename = (char *)argv[3];
+-	audiofile = sf_open_read ( filename, &sfinfo ) ;
++	audiofile = sf_open ( filename, SFM_READ, &sfinfo ) ;
+ 	max_ampl = get_max_ampl ( audiofile , &sfinfo) ;
+ 	max_cut = pow ( 10 , - gain/20 ) * 32767 ; // * max_ampl ;
+ 	first_usable = get_first_usable (max_cut,audiofile, &sfinfo) ;
+ 	fprintf (stderr, "Start at %d\n" , first_usable ) ;
+ 	last_usable = get_last_usable(max_cut,audiofile,&sfinfo) ;	
+-	fprintf (stderr, "Finish at %d of %d\n" , last_usable, sfinfo.samples ) ;
++	fprintf (stderr, "Finish at %d of %d\n" , last_usable, sfinfo.frames ) ;
+ 	mypid = getpid();	
+ 	sprintf ( outfile, "tmp%d.wav" , mypid );
+-	newaudiofile = sf_open_write ( outfile , &sfinfo ) ;
++	newaudiofile = sf_open ( outfile, SFM_WRITE, &sfinfo ) ;
+ 	position = sf_seek ( audiofile, first_usable , SEEK_SET ) ;
+ 	all = first_usable ;
+ 	written = 0 ;
+diff -uNr audiocut-0.6.orig/printwav.c audiocut-0.6/printwav.c
+--- audiocut-0.6.orig/printwav.c	Wed Aug 30 10:58:44 2000
++++ audiocut-0.6/printwav.c	Mon Sep 16 23:06:36 2002
+@@ -33,11 +33,10 @@
+ 	
+ 	filename = (char *)argv[1];
+ 
+-	audiofile = sf_open_read ( filename, &sfinfo ) ;
++	audiofile = sf_open ( filename, SFM_READ, &sfinfo ) ;
+ 	printf ( "Sample Rate %d\n" , sfinfo.samplerate );
+-	printf ( "Samples %d\n" , sfinfo.samples );
++	printf ( "Frames %d\n" , sfinfo.frames );
+ 	printf ( "Channels %d\n" , sfinfo.channels );
+-	printf ( "PCMbitwidth %d\n" , sfinfo.pcmbitwidth );
+ 	printf ( "Format 0x%0x\n" , sfinfo.format);
+ 	printf ( "Sections %d\n" , sfinfo.sections );
+ 	printf ( "Seekable %d\n" , sfinfo.seekable );
+diff -uNr audiocut-0.6.orig/split_wav.c audiocut-0.6/split_wav.c
+--- audiocut-0.6.orig/split_wav.c	Mon Sep 11 19:17:57 2000
++++ audiocut-0.6/split_wav.c	Mon Sep 16 23:07:19 2002
+@@ -46,18 +46,18 @@
+ 	}
+ 
+ 	filename = (char *)argv[3];
+-	audiofile = sf_open_read ( filename, &sfinfo ) ;
++	audiofile = sf_open ( filename, SFM_READ, &sfinfo ) ;
+ 	memcpy ( &leftinfo, &sfinfo , sizeof ( sfinfo ));
+ 	memcpy ( &rightinfo, &sfinfo , sizeof ( sfinfo ));
+ 	leftinfo.channels = 1 ;
+ 	rightinfo.channels = 1 ;
+ 	
+ 	sprintf ( workfile , "%s.left" , outfile ) ;
+-	leftaudiofile = sf_open_write ( workfile , &leftinfo ) ;
++	leftaudiofile = sf_open ( workfile, SFM_WRITE, &leftinfo ) ;
+ 	sprintf ( workfile , "%s.right" , outfile ) ;
+-	rightaudiofile = sf_open_write ( workfile , &rightinfo ) ;
++	rightaudiofile = sf_open ( workfile , SFM_WRITE, &rightinfo ) ;
+ 	i = 0;
+-	while ( i < sfinfo.samples ) {
++	while ( i < sfinfo.frames ) {
+ 		inframes = sf_readf_short ( audiofile,(short *) &Frames , MAX_FRAMES ) ;
+ 		for ( j=0 ; j<inframes; j++ ) {
+ 			outframes = sf_writef_short ( leftaudiofile, (short *)&Frames[j].left , 1 );
+diff -uNr audiocut-0.6.orig/time_wav.c audiocut-0.6/time_wav.c
+--- audiocut-0.6.orig/time_wav.c	Sat Sep  9 10:45:05 2000
++++ audiocut-0.6/time_wav.c	Mon Sep 16 23:07:37 2002
+@@ -21,8 +21,8 @@
+ 	} 
+ 	
+ 	filename = (char *)argv[1];
+-	audiofile = sf_open_read ( filename, &sfinfo ) ;
+-	time = sfinfo.samples / sfinfo.samplerate ;
++	audiofile = sf_open ( filename, SFM_READ, &sfinfo ) ;
++	time = sfinfo.frames / sfinfo.samplerate ;
+ 	min=time/60;
+ 	sec=time%60;
+ 	fprintf ( stdout, "%02d:%02d\n" , min , sec) ;
