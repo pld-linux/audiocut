@@ -28,7 +28,7 @@ oparty na znakomitej bibliotece libsndfile.
 
 %build
 %{__make} \
-	cc=%{__cc} \
+	CC="%{__cc}" \
 	CFLAGS="%{rpmcflags}" \
 	LDFLAGS="%{rpmldflags}"
 
