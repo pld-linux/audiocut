@@ -1,5 +1,5 @@
 Summary:	WAV file manipulation tools
-Summary(pl):	Narzêdzia do manipulacji plikami WAV
+Summary(pl.UTF-8):   NarzÄ™dzia do manipulacji plikami WAV
 Name:		audiocut
 Version:	0.6
 Release:	3
@@ -17,8 +17,8 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 Audiocut is package of some small programs to manipulate WAV files
 based on excellent libsndfile library.
 
-%description -l pl
-Audiocut to zbiór ma³ych programików do manipulowania plikami WAV,
+%description -l pl.UTF-8
+Audiocut to zbiÃ³r maÅ‚ych programikÃ³w do manipulowania plikami WAV,
 oparty na znakomitej bibliotece libsndfile.
 
 %prep
