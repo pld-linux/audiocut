@@ -1,5 +1,5 @@
 Summary:	WAV file manipulation tools
-Summary(pl.UTF-8):   Narzędzia do manipulacji plikami WAV
+Summary(pl.UTF-8):	Narzędzia do manipulacji plikami WAV
 Name:		audiocut
 Version:	0.6
 Release:	3
